@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+    function fn(urls,max){
+        const arr = []
+        let index = 0
+        let current_index = 0
+        const length = urls.length
+        return new Promise(async (res,rej)=>{
+            while(index < length){
+                const reqs = []
+                let n = max
+                while(index < length && n > 0){
+                    reqs.push(fetch(urls[index]))
+                    ++index
+                    --n
+                }
+                const values = await Promise.allSettled(reqs)
+                for(let i = 0; i < values.length; ++i){
+                    arr[current_index] = values[i]
+                    ++current_index
+                }
+                console.log(arr)
+                if(urls.length === arr.length){
+                    res(arr)
+                }
+            }
+        })
+    }
+
+    const urls = [
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+        'https://api.wrdan.com/randimg?key=mm',
+    ]
+
+    fn(urls,7).then(console.log)
+</script>
+</html>
